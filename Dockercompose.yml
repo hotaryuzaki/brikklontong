@@ -1,0 +1,42 @@
+version: '3'
+services:
+  postgresdb:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - $DB_PORT:$DB_PORT
+    volumes:
+    - db:/var/lib/postgres
+
+
+  api:
+    depends_on:
+      - postgresdb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    image: brikklontong
+    container_name: brikklontong
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=$DB_HOST
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASS
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/usr/src/app
+
+volumes: 
+  db:

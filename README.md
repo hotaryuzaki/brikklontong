@@ -1,3 +1,50 @@
+# SETUP PROJECT
+
+1. install docker desktop (docker engine & docker compose):
+https://docs.docker.com/desktop/install/linux/
+0. setup & login into docker desktop:
+https://docs.docker.com/desktop/get-started/#credentials-management-for-linux-users
+0. GIT pull brikklontong project:
+https://github.com/hotaryuzaki/brikklontong.git
+0. run npm install
+0. run docker build
+
+# DATABASE
+#### TABLE: PRODUCTS
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  int(10) - primary id  |
+|  2  |  categoryId  |  int(10)  |
+|  3  |  name  |  varchar(100)  |
+|  4  |  sku  |  int(10)  |
+|  5  |  description  |  text  |
+|  6  |  weight  |  int(10)  |
+|  7  |  width  |  int(10)  |
+|  8  |  length  |  int(10)  |
+|  9  |  height  |  int(10)  |
+|  10  |  image  |  int(10)  |
+|  11  |  price  |  int(10)  |
+
+#### TABLE: CATEGORIES
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  int(10) - primary id  |
+|  2  |  name  |  varchar(100)  |
+
+#### TABLE: ORDER
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  int(10) - primary id  |
+|  2  |  codeOrder  |  varchar(10)  |
+|  3  |  paymentCode  |  varchar(10)  |
+|  4  |  productId  |  int(10)  |
+|  5  |  createAt  |  timestamptz  |
+|  6  |  expireAt  |  timestamptz  |
+|  7  |  price  |  real  |
+|  8  |  deliveryPrice  |  real  |
+|  9  |  grandTotal  |  real  |
+|  10  |  userId  |  int(10)  |
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
