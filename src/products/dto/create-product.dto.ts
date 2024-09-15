@@ -1,7 +1,5 @@
-// import { CreateCategoryDto } from 'src/categories/dto/create-category.dto';
-
 export class CreateProductDto {
-  // category: CreateCategoryDto;
+  CategoryId: number; // This will store the foreign key for the category
   name: string;
   sku: string;
   description: string;

@@ -19,13 +19,45 @@ export class ProductsService {
   }
 
   async findAll() {
-    return await this.productRepository.find();
+    const products = await this.productRepository.find();
+
+    // Transform the data to match your desired schema
+    return products.map((product) => ({
+      id: product.id,
+      CategoryId: product.CategoryId,
+      categoryName: product.category.name,
+      sku: product.sku,
+      name: product.name,
+      description: product.description,
+      weight: product.weight,
+      width: product.width,
+      length: product.length,
+      height: product.height,
+      image: product.image,
+      price: product.price,
+    }));
   }
 
   async findOne(id: number) {
-    return await this.productRepository.findOne({
+    const product = await this.productRepository.findOne({
       where: { id },
     });
+
+    // Transform the data to match your desired schema
+    return {
+      id: product.id,
+      CategoryId: product.CategoryId,
+      categoryName: product.category.name,
+      sku: product.sku,
+      name: product.name,
+      description: product.description,
+      weight: product.weight,
+      width: product.width,
+      length: product.length,
+      height: product.height,
+      image: product.image,
+      price: product.price,
+    };
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
@@ -40,7 +72,9 @@ export class ProductsService {
   }
 
   async remove(id: number) {
-    const product = await this.findOne(id);
+    const product = await this.productRepository.findOne({
+      where: { id },
+    });
     if (!product) {
       throw new NotFoundException();
     }

@@ -1,13 +1,19 @@
 import { Category } from 'src/categories/entities/category.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => Category, (category) => category.id)
-  // category: Category;
+  // The foreign key column in the "products" table
+  @Column()
+  CategoryId: number;
+
+  // Many products belong to one category
+  @ManyToOne(() => Category, (category) => category.id, { eager: true }) // Eager loading to automatically load the category
+  @JoinColumn({ name: 'CategoryId' }) // This maps the foreign key to the relation
+  category: Category;
 
   @Column()
   name: string;

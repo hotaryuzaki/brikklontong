@@ -6,5 +6,5 @@ export class Category {
   id: number;
 
   @Column()
-  categoryName: string;
+  name: string;
 }
