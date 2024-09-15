@@ -17,7 +17,7 @@ RUN npm install
 # Copy everything else on the project
 COPY . .
 
-RUN npm build
+RUN npm run build
 
 EXPOSE 8080
 

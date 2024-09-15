@@ -7,43 +7,55 @@ https://docs.docker.com/desktop/get-started/#credentials-management-for-linux-us
 0. GIT pull brikklontong project:
 https://github.com/hotaryuzaki/brikklontong.git
 0. run npm install
-0. run docker build
+0. run docker compose up
 
 # DATABASE
 #### TABLE: PRODUCTS
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  int(10) - primary id  |
-|  2  |  categoryId  |  int(10)  |
-|  3  |  name  |  varchar(100)  |
-|  4  |  sku  |  int(10)  |
+|  1  |  id  |  integer - primary id  |
+|  2  |  categoryId  |  integer  |
+|  3  |  name  |  string  |
+|  4  |  sku  |  integer  |
 |  5  |  description  |  text  |
-|  6  |  weight  |  int(10)  |
-|  7  |  width  |  int(10)  |
-|  8  |  length  |  int(10)  |
-|  9  |  height  |  int(10)  |
-|  10  |  image  |  int(10)  |
-|  11  |  price  |  int(10)  |
+|  6  |  weight  |  integer  |
+|  7  |  width  |  integer  |
+|  8  |  length  |  integer  |
+|  9  |  height  |  integer  |
+|  10  |  image  |  integer  |
+|  11  |  price  |  integer  |
+
+#### TABLE: PRODUCTS_LOG
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  integer - primary id  |
+|  2  |  tableName  |  text  |
+|  3  |  recordId  |  integer  |
+|  4  |  operationType  |  text  |
+|  5  |  valueOld  |  text  |
+|  6  |  valueNew  |  text  |
+|  7  |  changeAt  |  timestamptz - default now()  |
+|  8  |  changeBy  |  integer  |
 
 #### TABLE: CATEGORIES
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  int(10) - primary id  |
-|  2  |  name  |  varchar(100)  |
+|  1  |  id  |  integer - primary id  |
+|  2  |  name  |  string  |
 
 #### TABLE: ORDER
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  int(10) - primary id  |
-|  2  |  codeOrder  |  varchar(10)  |
-|  3  |  paymentCode  |  varchar(10)  |
-|  4  |  productId  |  int(10)  |
-|  5  |  createAt  |  timestamptz  |
-|  6  |  expireAt  |  timestamptz  |
+|  1  |  id  |  integer - primary id  |
+|  2  |  codeOrder  |  string  |
+|  3  |  paymentCode  |  string  |
+|  4  |  productId  |  integer  |
+|  5  |  createAt  |  timestamptz - default now()  |
+|  6  |  expireAt  |  timestamptz - default now() + 3  |
 |  7  |  price  |  real  |
 |  8  |  deliveryPrice  |  real  |
 |  9  |  grandTotal  |  real  |
-|  10  |  userId  |  int(10)  |
+|  10  |  userId  |  integer  |
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
