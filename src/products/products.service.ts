@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductsService {
@@ -12,10 +12,30 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const product = this.productRepository.create(createProductDto);
+  async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
+    // Save the filename or path of the uploaded image
+    const product = this.productRepository.create({
+      ...createProductDto,
+      image: file ? file.filename : null, // Save the filename of the uploaded image
+    });
 
-    return await this.productRepository.save(product);
+    await this.productRepository.save(product);
+
+    // Transform the data to match your desired schema
+    return {
+      id: product.id,
+      CategoryId: product.CategoryId,
+      categoryName: product.category.name,
+      sku: product.sku,
+      name: product.name,
+      description: product.description,
+      weight: product.weight,
+      width: product.width,
+      length: product.length,
+      height: product.height,
+      image: product.image,
+      price: product.price,
+    };
   }
 
   async findAll() {
@@ -43,6 +63,9 @@ export class ProductsService {
       where: { id },
     });
 
+    if (!product)
+      throw new NotFoundException(`Product with id ${id} not found`);
+
     // Transform the data to match your desired schema
     return {
       id: product.id,
@@ -60,15 +83,38 @@ export class ProductsService {
     };
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.findOne(id);
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+    file?: Express.Multer.File,
+  ) {
+    const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
+
+    if (file) {
+      product.image = file.filename; // Update the image if a new file is uploaded
     }
 
     Object.assign(product, updateProductDto);
+    await this.productRepository.save(product);
 
-    return await this.productRepository.save(product);
+    // Transform the data to match your desired schema
+    return {
+      id: product.id,
+      CategoryId: product.CategoryId,
+      categoryName: product.category.name,
+      sku: product.sku,
+      name: product.name,
+      description: product.description,
+      weight: product.weight,
+      width: product.width,
+      length: product.length,
+      height: product.height,
+      image: product.image,
+      price: product.price,
+    };
   }
 
   async remove(id: number) {
@@ -76,9 +122,25 @@ export class ProductsService {
       where: { id },
     });
     if (!product) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Product with id ${id} not found`);
     }
 
-    return await this.productRepository.remove(product);
+    await this.productRepository.remove(product);
+
+    // Transform the data to match your desired schema
+    return {
+      id: product.id,
+      CategoryId: product.CategoryId,
+      categoryName: product.category.name,
+      sku: product.sku,
+      name: product.name,
+      description: product.description,
+      weight: product.weight,
+      width: product.width,
+      length: product.length,
+      height: product.height,
+      image: product.image,
+      price: product.price,
+    };
   }
 }

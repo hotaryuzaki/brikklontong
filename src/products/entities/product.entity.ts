@@ -37,7 +37,7 @@ export class Product {
   height: number;
 
   @Column()
-  image: string;
+  image: string; // Stores the filename of the uploaded image
 
   @Column()
   price: number;

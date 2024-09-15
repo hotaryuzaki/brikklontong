@@ -35,7 +35,7 @@ services:
     tty: true
     volumes:
       - .:/usr/src/app
-      - ./data:/usr/src/app/data
+      - ./uploads:/usr/src/app/uploads
     command: npm run start:dev
 
 volumes: 
