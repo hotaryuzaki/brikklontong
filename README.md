@@ -22,7 +22,7 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  7  |  width  |  integer  |
 |  8  |  length  |  integer  |
 |  9  |  height  |  integer  |
-|  10  |  image  |  integer  |
+|  10  |  image  |  string  |
 |  11  |  price  |  integer  |
 
 #### TABLE: PRODUCTS_LOG
