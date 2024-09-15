@@ -21,28 +21,36 @@ export class ProductsService {
 
     await this.productRepository.save(product);
 
+    const productAdd = await this.productRepository.findOne({
+      where: { id: product.id },
+    });
+
     // Transform the data to match your desired schema
     return {
-      id: product.id,
-      CategoryId: product.CategoryId,
-      categoryName: product.category.name,
-      sku: product.sku,
-      name: product.name,
-      description: product.description,
-      weight: product.weight,
-      width: product.width,
-      length: product.length,
-      height: product.height,
-      image: product.image,
-      price: product.price,
+      id: productAdd.id,
+      CategoryId: productAdd.CategoryId,
+      categoryName: productAdd.category.name,
+      sku: productAdd.sku,
+      name: productAdd.name,
+      description: productAdd.description,
+      weight: productAdd.weight,
+      width: productAdd.width,
+      length: productAdd.length,
+      height: productAdd.height,
+      image: productAdd.image,
+      price: productAdd.price,
     };
   }
 
-  async findAll() {
-    const products = await this.productRepository.find();
+  async findAll(page: number = 1, pageSize: number = 10) {
+    const [products, total] = await this.productRepository.findAndCount({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      relations: ['category'], // Include related category
+    });
 
     // Transform the data to match your desired schema
-    return products.map((product) => ({
+    const result = products.map((product) => ({
       id: product.id,
       CategoryId: product.CategoryId,
       categoryName: product.category.name,
@@ -56,6 +64,14 @@ export class ProductsService {
       image: product.image,
       price: product.price,
     }));
+
+    return {
+      data: result,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    };
   }
 
   async findOne(id: number) {
