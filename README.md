@@ -1,4 +1,4 @@
-# SETUP PROJECT
+# 1. SETUP PROJECT
 
 1. install docker desktop (docker engine & docker compose):
 https://docs.docker.com/desktop/install/linux/
@@ -9,8 +9,8 @@ https://github.com/hotaryuzaki/brikklontong.git
 0. run npm install
 0. run docker compose up
 
-# DATABASE
-#### TABLE: PRODUCTS
+# 2. DATABASE
+#### 1. TABLE: products
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
 |  1  |  id  |  number - primary id  |
@@ -25,13 +25,13 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  10  |  image  |  string  |
 |  11  |  price  |  number  |
 
-#### TABLE: CATEGORIES
+#### 2. TABLE: categories
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
 |  1  |  id  |  number - primary id  |
 |  2  |  name  |  string  |
 
-#### TABLE: AUDIT_LOG
+#### 3. TABLE: auditLog
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
 |  1  |  id  |  number - primary id  |
@@ -43,7 +43,7 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  7  |  newData  |  string  |
 |  8  |  changeBy  |  number  |
 
-#### TABLE: CART
+#### 4. TABLE: cart
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
 |  1  |  id  |  number - primary id  |
@@ -58,7 +58,7 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  10  |  userId  |  number  |
 |  11  |  statusCart  |  enum("order", "cart", "expired")  |
 
-#### TABLE: ORDER
+#### 5. TABLE: order
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
 |  1  |  id  |  number - primary id  |
@@ -74,8 +74,8 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  11  |  statusOrder  |  enum("paid", "unpaid", "expired")  |
 
 
-# API
-1. Products CRUD
+# 3. API
+#### 1. Products CRUD
 ```
 create: URL/products (POST)
       multipart/form-data : {
@@ -102,7 +102,8 @@ delete: URL/products/id (DEL)
 findAll: URL/products?page=1&pageSize=10&search=sop (GET)
 findOne: URL/products/id (GET)
 ```
-2. Categories CRUD
+
+#### 2. Categories CRUD
 ```
 create: URL/categories (POST)
       {
@@ -112,7 +113,8 @@ create: URL/categories (POST)
 delete: URL/categories/id (DEL)
 findOne: URL/categories/id (GET)
 ```
-3. Cart CRUD
+
+#### 3. Cart CRUD
 ```
 create: URL/cart (POST)
       {
@@ -123,7 +125,8 @@ delete: URL/cart/id (DEL)
 findAll: URL/cart (GET) => ONLY SHOWING RECORD WITH STATUSCART="CART"
 findOne: URL/cart/id (GET)
 ```
-4. Order CRUD
+
+#### 4. Order CRUD
 ```
 create: URL/order (POST)
       {
@@ -143,8 +146,8 @@ findAll: URL/order (GET) => ONLY SHOWING RECORD WITH STATUSORDER="UNPAID"
 findOne: URL/order/id (GET)
 ```
 
-# AUDIT LOGS
-Audit logs for Products store in Docker postgresdb auditLogs table. Please make sure to use double quote when querying auditLogs table.
+# 4. AUDIT LOGS
+Audit logs for the Products table are stored in a Docker container named Postgresdb in the auditLogs table. Please make sure to use double quote when querying the auditLogs table .
 ```
 SELECT * FROM "auditLogs";
 ```
