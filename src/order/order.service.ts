@@ -3,8 +3,9 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from './entities/order.entity';
+import { Order, statusOrder } from './entities/order.entity';
 import { ProductsService } from '../products/products.service';
+import { CartService } from 'src/cart/cart.service';
 
 @Injectable()
 export class OrderService {
@@ -12,73 +13,35 @@ export class OrderService {
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
     private readonly productsService: ProductsService,
+    private readonly cartService: CartService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
     let order = this.orderRepository.create(createOrderDto);
-    console.log(order.productId);
-
+    const cart = await this.cartService.findOne(order.cartId);
     const product = await this.productsService.findOne(order.productId);
-
-    console.log('product', product);
-
-    // {
-    //   id: 37,
-    //   CategoryId: 2,
-    //   categoryName: 'Cemilan',
-    //   sku: '93',
-    //   name: 'sop daging',
-    //   description: 'DAGING mahal',
-    //   weight: 2,
-    //   width: 2,
-    //   length: 3,
-    //   height: 3,
-    //   image: 'nestjs logo-e9ec-1726432174306.png',
-    //   price: 12000
-    // }
-
-    const code_order = Array(6)
-      .fill(null)
-      .map(() => Math.random().toString().substring(2, 3))
-      .join('');
-    const payment_code = Array(6)
-      .fill(null)
-      .map(() => Math.random().toString().substring(2, 3))
-      .join('');
 
     order = {
       ...order,
-      codeOrder: 'C' + code_order,
-      paymentCode: 'P' + payment_code,
+      codeOrder: cart.codeOrder,
+      paymentCode: cart.paymentCode,
       price: product.price,
       deliveryPrice: 10000, // CURRENTLY WE SET WITH THE DEFAULT VALUE 10.000
       grandTotal: product.price + 10000,
       userId: 1, // THIS FIELD WILL FILL BY THE USER ID, CURRENTLY WE ASSUME AS 1
     };
 
-    console.log('order', order);
+    Object.assign(cart, { statusCart: 'order' });
+    await this.cartService.update(order.cartId, cart);
 
-    const cartAdd = await this.orderRepository.save(order);
-
-    return cartAdd;
-
-    return {
-      id: cartAdd.id,
-      codeOrder: product.CategoryId,
-      paymentCode: product.sku,
-      productId: product.name,
-      createAt: product.description,
-      expireAt: product.weight,
-      price: product.width,
-      deliveryPrice: product.length,
-      grandTotal: product.height,
-      userId: product.image,
-      statusOrder: product.price,
-    };
+    const orderAdd = await this.orderRepository.save(order);
+    return orderAdd;
   }
 
   async findAll() {
-    return await this.orderRepository.find();
+    return await this.orderRepository.find({
+      where: { statusOrder: statusOrder.UNPAID },
+    });
   }
 
   async findOne(id: number) {

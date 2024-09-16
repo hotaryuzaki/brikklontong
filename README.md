@@ -75,8 +75,9 @@ https://github.com/hotaryuzaki/brikklontong.git
 
 
 # API
-1. products CRUD
-**create**: URL/products (POST)
+1. Products CRUD
+```
+create: URL/products (POST)
       multipart/form-data : {
         "CategoryId": 3,
         "sku": "107",
@@ -89,41 +90,58 @@ https://github.com/hotaryuzaki/brikklontong.git
         "image": [upload],
         "price": 22000
       }
-**update**: URL/products/id (PATCH)
+
+update: URL/products/id (PATCH)
       multipart/form-data : {
         "CategoryId": 2,
         "sku": "109",
         ... [partial/full]
       }
-**delete**: URL/products/id (DEL)
-**findAll**: URL/products?page=1&pageSize=10&search=sop (GET)
-**findOne**: URL/products/id (GET)
-1. categories CRUD
-**create**: URL/categories (POST)
+
+delete: URL/products/id (DEL)
+findAll: URL/products?page=1&pageSize=10&search=sop (GET)
+findOne: URL/products/id (GET)
+```
+2. Categories CRUD
+```
+create: URL/categories (POST)
       {
         "name": "Sayuran",
       }
-**delete**: URL/categories/id (DEL)
-**findOne**: URL/categories/id (GET)
-1. cart
-**create**: URL/cart (POST)
+
+delete: URL/categories/id (DEL)
+findOne: URL/categories/id (GET)
+```
+3. Cart CRUD
+```
+create: URL/cart (POST)
       {
-        "productId": 37,
+        "productId": 37, // REFERENCE TO THE RECORD IN PRODUCTS TABLE
       }
-**update**: URL/cart/id (PATCH)
+
+delete: URL/cart/id (DEL)
+findAll: URL/cart (GET) => ONLY SHOWING RECORD WITH STATUSCART="CART"
+findOne: URL/cart/id (GET)
+```
+4. Order CRUD
+```
+create: URL/order (POST)
       {
-        "name": "Buahan",
+        "cartId": 3, // REFERENCE TO THE RECORD IN CART TABLE
+        "productId": 37 // REFERENCE TO THE RECORD IN PRODUCTS TABLE
       }
-**delete**: URL/cart/id (DEL)
-**findAll**: URL/cart (GET)
-**findOne**: URL/cart/id (GET)
-1. order CRUD
-**create**: URL/order (POST)
+NOTE: statusCart in Cart table will set to "order"
+      
+update: URL/order/id (PATCH)
       {
-        "cartId": 2,
+        "statusOrder": "paid",
       }
-**delete**: URL/order/id (DEL)
-**findOne**: URL/order/id (GET)
+NOTE: set statusOrder to "paid"
+
+delete: URL/order/id (DEL)
+findAll: URL/order (GET) => ONLY SHOWING RECORD WITH STATUSORDER="UNPAID"
+findOne: URL/order/id (GET)
+```
 
 # AUDIT LOGS
 Audit logs for Products store in Docker postgresdb auditLogs table. Please make sure to use double quote when querying auditLogs table.

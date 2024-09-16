@@ -18,6 +18,10 @@ export class Order {
   @Column()
   paymentCode: string;
 
+  // The foreign key column from the "cart" table
+  @Column()
+  cartId: number;
+
   // The foreign key column from the "products" table
   @Column()
   productId: number;

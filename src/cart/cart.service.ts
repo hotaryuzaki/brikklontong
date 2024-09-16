@@ -3,7 +3,7 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cart } from './entities/cart.entity';
+import { Cart, statusCart } from './entities/cart.entity';
 import { ProductsService } from '../products/products.service';
 
 @Injectable()
@@ -42,7 +42,9 @@ export class CartService {
   }
 
   async findAll() {
-    return await this.cartRepository.find();
+    return await this.cartRepository.find({
+      where: { statusCart: statusCart.CART },
+    });
   }
 
   async findOne(id: number) {
