@@ -13,132 +13,126 @@ https://github.com/hotaryuzaki/brikklontong.git
 #### TABLE: PRODUCTS
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  integer - primary id  |
-|  2  |  categoryId  |  integer  |
+|  1  |  id  |  number - primary id  |
+|  2  |  categoryId  |  number  |
 |  3  |  name  |  string  |
-|  4  |  sku  |  integer  |
-|  5  |  description  |  text  |
-|  6  |  weight  |  integer  |
-|  7  |  width  |  integer  |
-|  8  |  length  |  integer  |
-|  9  |  height  |  integer  |
+|  4  |  sku  |  number  |
+|  5  |  description  |  string  |
+|  6  |  weight  |  number  |
+|  7  |  width  |  number  |
+|  8  |  length  |  number  |
+|  9  |  height  |  number  |
 |  10  |  image  |  string  |
-|  11  |  price  |  integer  |
-
-#### TABLE: PRODUCTS_LOG
-|  NO  |  FIELD NAME   |  DATA TYPE  |
-|---|---|---|
-|  1  |  id  |  integer - primary id  |
-|  2  |  tableName  |  text  |
-|  3  |  recordId  |  integer  |
-|  4  |  operationType  |  text  |
-|  5  |  valueOld  |  text  |
-|  6  |  valueNew  |  text  |
-|  7  |  changeAt  |  timestamptz - default now()  |
-|  8  |  changeBy  |  integer  |
+|  11  |  price  |  number  |
 
 #### TABLE: CATEGORIES
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  integer - primary id  |
+|  1  |  id  |  number - primary id  |
 |  2  |  name  |  string  |
+
+#### TABLE: AUDIT_LOG
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  number - primary id  |
+|  2  |  tableName  |  string  |
+|  3  |  recordId  |  number  |
+|  4  |  operationType  |  string  |
+|  5  |  operationTime  |  timestamptz - default now()  |
+|  6  |  oldData  |  string  |
+|  7  |  newData  |  string  |
+|  8  |  changeBy  |  number  |
+
+#### TABLE: CART
+|  NO  |  FIELD NAME   |  DATA TYPE  |
+|---|---|---|
+|  1  |  id  |  number - primary id  |
+|  2  |  codeOrder  |  string  |
+|  3  |  paymentCode  |  string  |
+|  4  |  productId  |  number  |
+|  5  |  createAt  |  timestamptz - default now()  |
+|  6  |  expireAt  |  timestamptz  |
+|  7  |  price  |  number  |
+|  8  |  deliveryPrice  |  number  |
+|  9  |  grandTotal  |  number  |
+|  10  |  userId  |  number  |
+|  11  |  statusCart  |  enum("order", "cart", "expired")  |
 
 #### TABLE: ORDER
 |  NO  |  FIELD NAME   |  DATA TYPE  |
 |---|---|---|
-|  1  |  id  |  integer - primary id  |
+|  1  |  id  |  number - primary id  |
 |  2  |  codeOrder  |  string  |
 |  3  |  paymentCode  |  string  |
-|  4  |  productId  |  integer  |
+|  4  |  productId  |  number  |
 |  5  |  createAt  |  timestamptz - default now()  |
 |  6  |  expireAt  |  timestamptz - default now() + 3  |
-|  7  |  price  |  real  |
-|  8  |  deliveryPrice  |  real  |
-|  9  |  grandTotal  |  real  |
-|  10  |  userId  |  integer  |
+|  7  |  price  |  number  |
+|  8  |  deliveryPrice  |  number  |
+|  9  |  grandTotal  |  number  |
+|  10  |  userId  |  number  |
+|  11  |  statusOrder  |  enum("paid", "unpaid", "expired")  |
 
+
+# API
+1. products CRUD
+**create**: URL/products (POST)
+      multipart/form-data : {
+        "CategoryId": 3,
+        "sku": "107",
+        "name": "TOKEK rica",
+        "description": "DAGING lele gede",
+        "weight": 2,
+        "width": 2,
+        "length": 3,
+        "height": 3,
+        "image": [upload],
+        "price": 22000
+      }
+**update**: URL/products/id (PATCH)
+      multipart/form-data : {
+        "CategoryId": 2,
+        "sku": "109",
+        ... [partial/full]
+      }
+**delete**: URL/products/id (DEL)
+**findAll**: URL/products?page=1&pageSize=10&search=sop (GET)
+**findOne**: URL/products/id (GET)
+1. categories CRUD
+**create**: URL/categories (POST)
+      {
+        "name": "Sayuran",
+      }
+**delete**: URL/categories/id (DEL)
+**findOne**: URL/categories/id (GET)
+1. cart
+**create**: URL/cart (POST)
+      {
+        "productId": 37,
+      }
+**update**: URL/cart/id (PATCH)
+      {
+        "name": "Buahan",
+      }
+**delete**: URL/cart/id (DEL)
+**findAll**: URL/cart (GET)
+**findOne**: URL/cart/id (GET)
+1. order CRUD
+**create**: URL/order (POST)
+      {
+        "cartId": 2,
+      }
+**delete**: URL/order/id (DEL)
+**findOne**: URL/order/id (GET)
+
+# AUDIT LOGS
+Audit logs for Products store in Docker postgresdb auditLogs table. Please make sure to use double quote when querying auditLogs table.
+```
+SELECT * FROM "auditLogs";
+```
+
+---
+To NestJS docs clicks the icon:
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ yarn install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

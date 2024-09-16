@@ -1,12 +1,12 @@
-import { Category } from 'src/categories/entities/category.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // The foreign key column in the "products" table
+  // The foreign key column from the "categories" table
   @Column()
   CategoryId: number;
 

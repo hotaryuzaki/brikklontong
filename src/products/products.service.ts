@@ -57,7 +57,7 @@ export class ProductsService {
         },
       );
     }
-    
+
     const [products, total] = await queryBuilder.getManyAndCount();
 
     // Transform the data to match your desired schema
