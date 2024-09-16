@@ -116,6 +116,11 @@ export class ProductsService {
     Object.assign(product, updateProductDto);
     await this.productRepository.save(product);
 
+    const price =
+      typeof product.price === 'string'
+        ? parseInt(product.price, 10)
+        : product.price;
+
     // Transform the data to match your desired schema
     return {
       id: product.id,
@@ -129,7 +134,7 @@ export class ProductsService {
       length: product.length,
       height: product.height,
       image: product.image,
-      price: product.price,
+      price: !isNaN(price) ? price : null, // Ensure it's a number or null
     };
   }
 
