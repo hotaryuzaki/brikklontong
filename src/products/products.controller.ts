@@ -56,8 +56,9 @@ export class ProductsController {
   findAll(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
+    @Query('search') search?: string,
   ) {
-    return this.productsService.findAll(page, pageSize);
+    return this.productsService.findAll(page, pageSize, search);
   }
 
   @Get(':id')

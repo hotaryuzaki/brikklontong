@@ -42,12 +42,23 @@ export class ProductsService {
     };
   }
 
-  async findAll(page: number = 1, pageSize: number = 10) {
-    const [products, total] = await this.productRepository.findAndCount({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      relations: ['category'], // Include related category
-    });
+  async findAll(page: number = 1, pageSize: number = 10, search?: string) {
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category')
+      .skip((page - 1) * pageSize)
+      .take(pageSize);
+
+    if (search) {
+      queryBuilder.where(
+        'product.name LIKE :search OR product.sku LIKE :search',
+        {
+          search: `%${search}%`,
+        },
+      );
+    }
+    
+    const [products, total] = await queryBuilder.getManyAndCount();
 
     // Transform the data to match your desired schema
     const result = products.map((product) => ({
