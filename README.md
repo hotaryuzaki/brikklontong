@@ -70,8 +70,11 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  7  |  price  |  number  |
 |  8  |  deliveryPrice  |  number  |
 |  9  |  grandTotal  |  number  |
-|  10  |  userId  |  number  |
-|  11  |  statusOrder  |  enum("paid", "unpaid", "expired")  |
+|  11  |  address  |  string  |
+|  12  |  bankProvider  |  string  |
+|  13  |  bankAccount  |  float  |
+|  14  |  userId  |  number  |
+|  15  |  statusOrder  |  enum("paid", "unpaid", "expired")  |
 
 
 # 3. API
@@ -132,6 +135,9 @@ create: URL/order (POST)
       {
         "cartId": 3, // REFERENCE TO THE RECORD IN CART TABLE
         "productId": 37 // REFERENCE TO THE RECORD IN PRODUCTS TABLE
+        "address": "jl kalibata selatan",
+        "bankProvider": "Mandiri",
+        "bankAccount": 12345678901234
       }
 NOTE: statusCart in Cart table will set to "order"
       

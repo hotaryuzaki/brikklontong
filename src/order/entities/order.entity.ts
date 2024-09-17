@@ -52,6 +52,15 @@ export class Order {
   @Column()
   grandTotal: number;
 
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  bankProvider: string;
+
+  @Column({ type: 'float', nullable: true })
+  bankAccount: number;
+
   @Column()
   userId: number;
 
