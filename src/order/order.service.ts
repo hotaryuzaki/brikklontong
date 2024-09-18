@@ -21,6 +21,10 @@ export class OrderService {
     const cart = await this.cartService.findOne(order.cartId);
     const product = await this.productsService.findOne(order.productId);
 
+    // Set expireAt to 1 day after the current timestamp
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1);
+
     order = {
       ...order,
       codeOrder: cart.codeOrder,
@@ -29,6 +33,7 @@ export class OrderService {
       deliveryPrice: 10000, // CURRENTLY WE SET WITH THE DEFAULT VALUE 10.000
       grandTotal: product.price + 10000,
       userId: 1, // THIS FIELD WILL FILL BY THE USER ID, CURRENTLY WE ASSUME AS 1
+      expireAt: currentDate,
     };
 
     Object.assign(cart, { statusCart: 'order' });

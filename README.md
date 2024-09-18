@@ -66,7 +66,7 @@ https://github.com/hotaryuzaki/brikklontong.git
 |  3  |  paymentCode  |  string  |
 |  4  |  productId  |  number  |
 |  5  |  createAt  |  timestamptz - default now()  |
-|  6  |  expireAt  |  timestamptz - default now() + 3  |
+|  6  |  expireAt  |  timestamptz - default now() + 1  |
 |  7  |  price  |  number  |
 |  8  |  deliveryPrice  |  number  |
 |  9  |  grandTotal  |  number  |

@@ -37,10 +37,7 @@ export class Order {
   })
   createAt: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => "CURRENT_TIMESTAMP + INTERVAL '1 day'",
-  })
+  @Column({ nullable: true })
   expireAt: Date;
 
   @Column()
